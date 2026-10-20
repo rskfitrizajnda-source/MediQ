@@ -28,9 +28,6 @@ export default function Navbar() {
                 <span className="text-xl font-black tracking-tight text-slate-900 flex items-center gap-1">
                   Medi<span className="text-primary-600">Q</span>
                 </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 block -mt-1">
-                  Clinic Queue
-                </span>
               </div>
             </Link>
 
@@ -93,6 +90,14 @@ export default function Navbar() {
                   >
                     <Stethoscope className="w-4 h-4" />
                     Panel Dokter
+                  </Link>
+                ) : user?.role === 'PATIENT' ? (
+                  <Link
+                    to="/patient/booking"
+                    className="px-3.5 py-2 text-sm font-semibold text-primary-600 bg-primary-50 rounded-xl transition-colors flex items-center gap-1.5"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    Portal Pasien
                   </Link>
                 ) : (
                   <Link

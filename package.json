@@ -8,11 +8,14 @@
     "client"
   ],
   "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue.bold,green.bold\" \"npm run server\" \"npm run client\"",
+    "start": "npm run dev",
     "install:all": "npm --prefix server install && npm --prefix client install",
     "server": "npm --prefix server run dev",
     "client": "npm --prefix client run dev",
     "db:push": "npm --prefix server run prisma:push",
     "db:seed": "npm --prefix server run prisma:seed",
+    "db:update-emails": "npm --prefix server run update-emails",
     "build": "npm --prefix client run build",
     "package": "bash package_project.sh"
   },
@@ -26,6 +29,8 @@
     "prisma"
   ],
   "author": "MediQ Team",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
 }
-

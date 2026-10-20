@@ -34,7 +34,7 @@ async function main() {
   await prisma.user.create({
     data: {
       name: 'Admin MediQ',
-      email: 'admin@mediq.com',
+      email: 'admin@gmail.com',
       password: defaultPassword,
       role: 'ADMIN',
     },
@@ -43,9 +43,18 @@ async function main() {
   await prisma.user.create({
     data: {
       name: 'Resepsionis Siti',
-      email: 'resepsionis@mediq.com',
+      email: 'resepsionis@gmail.com',
       password: defaultPassword,
       role: 'RECEPTIONIST',
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      name: 'Pasien Rian',
+      email: 'pasien@gmail.com',
+      password: defaultPassword,
+      role: 'PATIENT',
     },
   });
 
@@ -90,7 +99,7 @@ async function main() {
   const userDokter1 = await prisma.user.create({
     data: {
       name: 'dr. Andi Pratama',
-      email: 'dokter.andi@mediq.com',
+      email: 'dokter.andi@gmail.com',
       password: defaultPassword,
       role: 'DOCTOR',
     },
@@ -113,7 +122,7 @@ async function main() {
   const userDokter2 = await prisma.user.create({
     data: {
       name: 'drg. Sarah Amanda',
-      email: 'dokter.sarah@mediq.com',
+      email: 'dokter.sarah@gmail.com',
       password: defaultPassword,
       role: 'DOCTOR',
     },
@@ -136,7 +145,7 @@ async function main() {
   const userDokter3 = await prisma.user.create({
     data: {
       name: 'dr. Budi Santoso, Sp.A',
-      email: 'dokter.budi@mediq.com',
+      email: 'dokter.budi@gmail.com',
       password: defaultPassword,
       role: 'DOCTOR',
     },
@@ -351,10 +360,11 @@ async function main() {
 
   console.log('Seeding selesai dengan sukses!');
   console.log('User Demo:');
-  console.log('- Admin: admin@mediq.com / password123');
-  console.log('- Resepsionis: resepsionis@mediq.com / password123');
-  console.log('- Dokter 1: dokter.andi@mediq.com / password123');
-  console.log('- Dokter 2: dokter.sarah@mediq.com / password123');
+  console.log('- Admin: admin@gmail.com / password123');
+  console.log('- Resepsionis: resepsionis@gmail.com / password123');
+  console.log('- Pasien: pasien@gmail.com / password123');
+  console.log('- Dokter 1: dokter.andi@gmail.com / password123');
+  console.log('- Dokter 2: dokter.sarah@gmail.com / password123');
 }
 
 main()

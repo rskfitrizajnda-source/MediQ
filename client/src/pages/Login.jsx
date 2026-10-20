@@ -21,6 +21,8 @@ export default function Login() {
       const res = await login(email, password);
       if (res.user.role === 'DOCTOR') {
         navigate('/doctor/dashboard');
+      } else if (res.user.role === 'PATIENT') {
+        navigate('/patient/booking');
       } else {
         navigate('/admin/dashboard');
       }
@@ -43,9 +45,9 @@ export default function Login() {
           <div className="w-12 h-12 rounded-2xl bg-primary-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-primary-500/30">
             <Activity className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-black text-slate-800">Masuk Portal Staff MediQ</h1>
+          <h1 className="text-2xl font-black text-slate-800">Masuk Portal MediQ</h1>
           <p className="text-xs text-slate-500">
-            Masuk untuk mengakses panel kontrol antrean dokter dan resepsionis
+            Masuk untuk mengakses layanan dokter, resepsionis, atau portal pasien
           </p>
         </div>
 
@@ -70,7 +72,7 @@ export default function Login() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="nama@mediq.com"
+                placeholder="nama@gmail.com"
                 className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
@@ -110,22 +112,30 @@ export default function Login() {
           <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 text-center mb-2.5">
             Akun Percobaan (Demo Quick Access)
           </p>
-          <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="grid grid-cols-3 gap-2 text-xs">
             <button
               type="button"
-              onClick={() => handleQuickLogin('dokter.andi@mediq.com')}
+              onClick={() => handleQuickLogin('dokter.andi@gmail.com')}
               className="p-2 border border-slate-200 hover:border-primary-400 hover:bg-primary-50 rounded-lg text-slate-700 transition-colors text-left"
             >
-              <div className="font-bold text-[11px]">dr. Andi Pratama</div>
-              <div className="text-[10px] text-slate-400">Poli Umum</div>
+              <div className="font-bold text-[11px] truncate">dr. Andi</div>
+              <div className="text-[10px] text-slate-400 truncate">Poli Umum</div>
             </button>
             <button
               type="button"
-              onClick={() => handleQuickLogin('resepsionis@mediq.com')}
+              onClick={() => handleQuickLogin('resepsionis@gmail.com')}
               className="p-2 border border-slate-200 hover:border-primary-400 hover:bg-primary-50 rounded-lg text-slate-700 transition-colors text-left"
             >
-              <div className="font-bold text-[11px]">Resepsionis Siti</div>
-              <div className="text-[10px] text-slate-400">Check-in & Walk-in</div>
+              <div className="font-bold text-[11px] truncate">Resepsionis</div>
+              <div className="text-[10px] text-slate-400 truncate">Siti</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('pasien@gmail.com')}
+              className="p-2 border border-slate-200 hover:border-primary-400 hover:bg-primary-50 rounded-lg text-slate-700 transition-colors text-left"
+            >
+              <div className="font-bold text-[11px] truncate">Pasien Rian</div>
+              <div className="text-[10px] text-slate-400 truncate">Demo Pasien</div>
             </button>
           </div>
         </div>

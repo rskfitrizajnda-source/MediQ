@@ -30,6 +30,7 @@ server.listen(PORT, () => {
   console.log(`===============================================`);
 });
 
+
 // Graceful Shutdown
 process.on('SIGTERM', async () => {
   console.log('SIGTERM signal diterima: menutup HTTP server');
