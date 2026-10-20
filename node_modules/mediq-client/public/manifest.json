@@ -1,0 +1,17 @@
+{
+  "short_name": "MediQ",
+  "name": "MediQ - Antrean & Layanan Klinik",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/patient/booking",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "display": "standalone",
+  "orientation": "portrait"
+}
+

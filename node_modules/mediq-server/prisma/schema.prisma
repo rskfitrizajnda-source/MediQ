@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DOCTOR
+  RECEPTIONIST
+}
+
+enum QueueStatus {
+  PENDING         // Sudah booking online, belum check-in di klinik
+  CHECKED_IN      // Sudah scan QR / check-in di resepsionis, menunggu dipanggil
+  CALLING         // Sedang dipanggil ke ruang dokter (muncul di TV & bersuara)
+  IN_CONSULTATION // Sedang di dalam ruang dokter menjalani pemeriksaan
+  COMPLETED       // Konsultasi selesai
+  SKIPPED         // Pasien dipanggil berulang kali tidak hadir
+  CANCELLED       // Dibatalkan oleh pasien atau admin
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(RECEPTIONIST)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  doctor    Doctor?
+
+  @@map("users")
+}
+
+model Polyclinic {
+  id          String   @id @default(uuid())
+  name        String   @unique // contoh: Poli Umum, Poli Gigi, Poli Anak
+  code        String   @unique // Kode antrean prefix: A, B, C, D
+  description String?
+  color       String   @default("#2563eb") // Hex color for UI badges
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  doctors     Doctor[]
+  queues      Queue[]
+
+  @@map("polyclinics")
+}
+
+model Doctor {
+  id                     String      @id @default(uuid())
+  userId                 String      @unique
+  user                   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  polyclinicId           String
+  polyclinic             Polyclinic  @relation(fields: [polyclinicId], references: [id])
+  roomNumber             String      // contoh: Ruang 101, Ruang 02
+  quotaPerDay            Int         @default(30)
+  avgConsultationMinutes Int         @default(12) // Estimasi menit per pasien untuk kalkulasi Dynamic ETA
+  isActive               Boolean     @default(true)
+  scheduleDays           String      @default("Senin,Selasa,Rabu,Kamis,Jumat")
+  startTime              String      @default("08:00")
+  endTime                String      @default("16:00")
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  queues                 Queue[]
+
+  @@map("doctors")
+}
+
+model Patient {
+  id        String    @id @default(uuid())
+  nik       String    @unique // Nomor Induk Kependudukan 16 digit
+  name      String
+  phone     String
+  email     String?
+  address   String?
+  gender    String    @default("L") // L / P
+  birthDate DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  queues    Queue[]
+
+  @@map("patients")
+}
+
+model Queue {
+  id             String      @id @default(uuid())
+  ticketNumber   String      // contoh: A-001, B-012
+  bookingCode    String      @unique // contoh: MED-20261008-0001
+  sequenceNumber Int         // Nomor urut hari itu: 1, 2, 3...
+  queueDate      DateTime    // Tanggal kunjungan (YYYY-MM-DD)
+  status         QueueStatus @default(PENDING)
+  callCount      Int         @default(0) // Berapa kali dipanggil dokter
+  complaint      String?     // Keluhan pasien
+  diagnosisNotes String?     // Catatan/resep dari dokter
+  estimatedTime  DateTime?   // Dynamic ETA waktu dipanggil
+  checkInTime    DateTime?   // Waktu saat scan QR / check-in di resepsionis
+  calledTime     DateTime?   // Waktu saat dipanggil ke ruang dokter
+  startTime      DateTime?   // Waktu mulai konsultasi
+  endTime        DateTime?   // Waktu selesai konsultasi
+  patientId      String
+  patient        Patient     @relation(fields: [patientId], references: [id])
+  doctorId       String
+  doctor         Doctor      @relation(fields: [doctorId], references: [id])
+  polyclinicId   String
+  polyclinic     Polyclinic  @relation(fields: [polyclinicId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@index([queueDate, polyclinicId, status])
+  @@index([bookingCode])
+  @@map("queues")
+}
+
+model ClinicSetting {
+  id               String   @id @default(uuid())
+  clinicName       String   @default("Klinik Pratama MediQ")
+  address          String   @default("Jl. Kesehatan Raya No. 128, Jakarta")
+  phone            String   @default("(021) 555-0199")
+  runningText      String   @default("Selamat datang di Klinik Pratama MediQ. Harap menjaga ketertiban dan selalu memakai masker.")
+  audioGreeting    String   @default("Nomor antrean {ticket}, silakan menuju {polyclinic}, {room}.")
+  autoCallRepeat   Int      @default(2)
+  updatedAt        DateTime @updatedAt
+
+  @@map("clinic_settings")
+}
+

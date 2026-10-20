@@ -1,0 +1,31 @@
+{
+  "name": "mediq-monorepo",
+  "version": "1.0.0",
+  "description": "MediQ - Smart Clinic Queue & Healthcare Management System",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "server": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "db:push": "npm --prefix server run prisma:push",
+    "db:seed": "npm --prefix server run prisma:seed",
+    "build": "npm --prefix client run build",
+    "package": "bash package_project.sh"
+  },
+  "keywords": [
+    "clinic-management",
+    "queue-system",
+    "realtime",
+    "socket.io",
+    "react",
+    "express",
+    "prisma"
+  ],
+  "author": "MediQ Team",
+  "license": "MIT"
+}
+
