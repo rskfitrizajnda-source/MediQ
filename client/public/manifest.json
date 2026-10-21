@@ -1,17 +1,24 @@
 {
+  "id": "/",
   "short_name": "MediQ",
   "name": "MediQ - Antrean & Layanan Klinik",
+  "description": "Sistem manajemen antrean dan layanan klinik real-time.",
+  "lang": "id-ID",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#0284c7",
   "icons": [
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
-      "sizes": "192x192 512x512"
+      "sizes": "any",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "/patient/booking",
-  "background_color": "#ffffff",
-  "theme_color": "#0284c7",
-  "display": "standalone",
-  "orientation": "portrait"
+  "categories": ["medical", "health", "productivity"]
 }
-
