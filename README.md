@@ -2,6 +2,42 @@
 
 MediQ adalah aplikasi manajemen antrean klinik dengan frontend React/Vite, backend Express + Socket.IO, dan PostgreSQL melalui Prisma.
 
+## Pasang MediQ seperti aplikasi Android (PWA)
+
+Frontend MediQ telah dikonfigurasi agar dapat dipasang dari Chrome Android ke layar utama dan dibuka dalam mode aplikasi tanpa address bar. Pengguna tidak perlu mengunduh APK untuk cara ini.
+
+### Pemasangan melalui URL HTTPS (direkomendasikan untuk penggunaan nyata)
+
+1. Deploy backend dan frontend mengikuti bagian **Deployment** di bawah.
+2. Buka URL HTTPS frontend MediQ di Chrome pada HP Android.
+3. Buka menu Chrome (⋮), pilih **Install app / Pasang aplikasi**. Jika yang muncul **Add to Home screen / Tambahkan ke layar utama**, pilih opsi itu.
+4. Ketuk ikon MediQ yang muncul di layar utama. API dan fitur antrean realtime tetap membutuhkan koneksi internet serta backend yang aktif.
+
+### Uji pada HP Android yang tersambung melalui USB ke komputer
+
+Persyaratan: Node.js, ADB/Android Platform Tools, dan USB debugging yang sudah disetujui di HP.
+
+1. Di komputer, jalankan backend dan frontend sesuai petunjuk **Jalankan secara lokal**.
+2. Di PowerShell kedua, pastikan HP terdeteksi:
+
+   ```powershell
+   adb devices
+   ```
+
+   Status perangkat harus `device`, bukan `unauthorized`.
+
+3. Teruskan port pengembangan ke HP:
+
+   ```powershell
+   adb reverse tcp:5173 tcp:5173
+   adb reverse tcp:5000 tcp:5000
+   ```
+
+4. Buka Chrome di HP dan kunjungi `http://localhost:5173`. Di menu Chrome, pilih **Install app / Pasang aplikasi** atau **Add to Home screen / Tambahkan ke layar utama**. Jika opsi instalasi belum muncul, muat ulang halaman dan pastikan file manifest serta service worker berhasil dimuat.
+5. Untuk uji USB, komputer dan kedua server harus tetap menyala dan port forwarding masih aktif. Ini bukan rilis publik; gunakan URL HTTPS setelah deployment.
+
+PWA bukan proyek Flutter, sehingga tidak dijalankan dengan `flutter run`. Untuk paket APK native, proyek Android/Capacitor perlu dibuat dan dibangun terpisah.
+
 ## Persiapan keamanan sebelum rilis
 
 **Jangan gunakan kredensial yang pernah tersimpan di repository publik.** File environment yang ada di versi terbaru sudah dihapus, tetapi penghapusan file tidak menghilangkan isinya dari riwayat Git.
