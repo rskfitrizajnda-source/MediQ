@@ -1,7 +1,9 @@
-const API_BASE = '/api';
+const configuredApiUrl = (import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '');
+const API_BASE = `${configuredApiUrl}/api`;
 
 /**
- * Helper request fetch wrapper dengan otomatis header Authorization Bearer token
+ * Helper request fetch wrapper dengan otomatis header Authorization Bearer token.
+ * API_BASE tetap /api saat development lokal menggunakan proxy Vite.
  */
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem('mediq_token');
@@ -54,27 +56,15 @@ export const api = {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
-    call: (queueId) =>
-      request(`/queues/${queueId}/call`, {
-        method: 'POST',
-      }),
-    recall: (queueId) =>
-      request(`/queues/${queueId}/recall`, {
-        method: 'POST',
-      }),
-    start: (queueId) =>
-      request(`/queues/${queueId}/start`, {
-        method: 'POST',
-      }),
+    call: (queueId) => request(`/queues/${queueId}/call`, { method: 'POST' }),
+    recall: (queueId) => request(`/queues/${queueId}/recall`, { method: 'POST' }),
+    start: (queueId) => request(`/queues/${queueId}/start`, { method: 'POST' }),
     finish: (queueId, diagnosisNotes) =>
       request(`/queues/${queueId}/finish`, {
         method: 'POST',
         body: JSON.stringify({ diagnosisNotes }),
       }),
-    skip: (queueId) =>
-      request(`/queues/${queueId}/skip`, {
-        method: 'POST',
-      }),
+    skip: (queueId) => request(`/queues/${queueId}/skip`, { method: 'POST' }),
     getTvDisplay: () => request('/queues/display'),
     track: (code) => request(`/queues/track/${code}`),
   },
@@ -116,4 +106,3 @@ export const api = {
     getOverview: () => request('/clinic/overview'),
   },
 };
-

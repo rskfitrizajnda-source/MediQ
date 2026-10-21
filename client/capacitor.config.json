@@ -1,0 +1,5 @@
+{
+  "appId": "id.mediq.app",
+  "appName": "MediQ",
+  "webDir": "dist"
+}

@@ -38,6 +38,47 @@ Persyaratan: Node.js, ADB/Android Platform Tools, dan USB debugging yang sudah d
 
 PWA bukan proyek Flutter, sehingga tidak dijalankan dengan `flutter run`. Untuk paket APK native, proyek Android/Capacitor perlu dibuat dan dibangun terpisah.
 
+## Build APK Android
+
+APK MediQ adalah aplikasi Android yang membungkus frontend; backend Express dan database PostgreSQL tetap harus aktif dan bisa diakses HP. Siapkan URL backend HTTPS terlebih dahulu sesuai bagian **Deployment**, lalu pada komputer Windows pasang Node.js 22+ (Capacitor 8), Android Studio dengan Android SDK Platform 36, dan JDK 17+.
+
+1. Dari folder `client`, buat file `.env.local` berisi URL backend publik (tanpa akhiran `/api`):
+
+   ```dotenv
+   VITE_API_URL=https://alamat-backend-anda
+   VITE_SOCKET_URL=https://alamat-backend-anda
+   ```
+
+2. Dari folder root repository, instal dependensi bila belum:
+
+   ```powershell
+   npm install
+   ```
+
+3. Buat proyek Android native satu kali:
+
+   ```powershell
+   cd client
+   npm run android:add
+   ```
+
+4. Setiap kali frontend atau URL backend berubah, sinkronkan aset:
+
+   ```powershell
+   npm run android:sync
+   ```
+
+5. Build APK debug dari PowerShell:
+
+   ```powershell
+   cd android
+   .\gradlew.bat assembleDebug
+   ```
+
+   APK tersedia di `client/android/app/build/outputs/apk/debug/app-debug.apk`. Salin APK ke HP Android dan izinkan pemasangan dari sumber tersebut. Untuk distribusi publik, buat signed release APK/AAB melalui Android Studio; jangan membagikan debug APK sebagai rilis produksi.
+
+Build APK membutuhkan Android SDK dan JDK yang didukung Android Gradle Plugin. APK hanya dapat mengakses backend yang dijangkau HP; gunakan HTTPS untuk deployment, bukan alamat `localhost` komputer.
+
 ## Persiapan keamanan sebelum rilis
 
 **Jangan gunakan kredensial yang pernah tersimpan di repository publik.** File environment yang ada di versi terbaru sudah dihapus, tetapi penghapusan file tidak menghilangkan isinya dari riwayat Git.
