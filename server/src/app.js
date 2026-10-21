@@ -11,9 +11,15 @@ const { errorHandler, notFoundHandler } = require('./middlewares/error.middlewar
 
 const app = express();
 
-// Middlewares
+// CLIENT_URL dapat berisi satu atau beberapa origin yang dipisahkan koma.
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+// Middleware: jangan membuka API ke semua origin di production.
 app.use(cors({
-  origin: '*',
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -21,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan('dev'));
+  app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 }
 
 // Health check endpoint
@@ -46,4 +52,3 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;
-
