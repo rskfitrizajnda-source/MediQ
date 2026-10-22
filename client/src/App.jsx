@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import InstallPWABanner from './components/InstallPWABanner';
 
 // Pages
 import Home from './pages/Home';
@@ -126,6 +127,9 @@ export default function App() {
           </Routes>
         </main>
       </div>
+
+      {/* Banner Pasang Aplikasi di HP (PWA) */}
+      <InstallPWABanner />
     </div>
   );
 }
